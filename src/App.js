@@ -1,40 +1,50 @@
 import './App.css';
-import Modal from 'react-modal';
-import { useState } from 'react';
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
+import { forwardRef } from 'react';
 
-Modal.setAppElement('#root'); // console 창 에러 없애기 위해서
+const ColoredTooltip = () => {
+  return <span style={{ color: 'yellow' }}>Colored Component</span>;
+};
+
+// customize component 사용하기 위해서는 forwardRef 사용해야 한다.
+const CustomChild = forwardRef((props, ref) => {
+  return (
+    <div ref={ref}>
+      <div>First line</div>
+      <div>Second line</div>
+    </div>
+  );
+});
 
 function App() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="App">
-      <button onClick={() => setModalIsOpen(true)}>open modal</button>
-      <Modal
-        isOpen={modalIsOpen}
-        shouldCloseOnOverlayClick={false}
-        onRequestClose={() => setModalIsOpen(false)}
-        style={{
-          overlay: {
-            backgroundColor: 'gray',
-          },
-          content: {
-            color: 'orange',
-          },
-        }}
-      >
-        <h2>Modal title</h2>
-        <p>Modal body</p>
-        <button onClick={() => setModalIsOpen(false)}>close modal</button>
-      </Modal>
+      <div style={{ paddingBottom: '20px' }}>
+        <Tippy placement="right" arrow={false} delay={1000} content="Basic Tooltip">
+          <button>Hover</button>
+        </Tippy>
+      </div>
+
+      <div style={{ paddingBottom: '20px' }}>
+        <Tippy content={<span style={{ color: 'orange' }}> Colered</span>}>
+          <button>Hover</button>
+        </Tippy>
+      </div>
+
+      <div style={{ paddingBottom: '20px' }}>
+        <Tippy content={<ColoredTooltip></ColoredTooltip>}>
+          <button>Hover</button>
+        </Tippy>
+      </div>
+
+      <div style={{ paddingBottom: '20px' }}>
+        <Tippy placement="top-start" content={<ColoredTooltip></ColoredTooltip>}>
+          <CustomChild></CustomChild>
+        </Tippy>
+      </div>
     </div>
   );
 }
 
 export default App;
-
-/**
- 
-shouldCloseOnOverlayClick -> over lay 부분, 즉 modal 이외의 부분 눌러도 반응안한다 
-shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}
-이렇게 두면 overlay 부분 눌러도 모달 닫히지 않지만, esc 누르면 모달 닫힌다
- */
