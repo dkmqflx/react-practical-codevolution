@@ -1,18 +1,46 @@
 import './App.css';
-import { FaReact } from 'react-icons/fa';
-import { MdAlarmAdd } from 'react-icons/md';
-import { IconContext } from 'react-icons';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure();
+
+// toast를 컴포넌트로 customize 할 수 있다
+const CustomToast = ({ closeToast }) => {
+  return (
+    <div>
+      Something went wrong
+      <button onClick={closeToast}>close</button>
+    </div>
+  );
+};
 
 function App() {
+  const notify = () => {
+    toast(`Basic notification`, {
+      position: toast.POSITION.TOP_LEFT,
+    });
+    toast.success(`Basic notification`, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 8000,
+    });
+    toast.info(`Basic notification`, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: false,
+    });
+    toast.warn(<CustomToast />, {
+      position: toast.POSITION.BOTTOM_LEFT,
+    });
+    toast.error(`Basic notification`, {
+      position: toast.POSITION.BOTTOM_CENTER,
+    });
+    toast(`Basic notification`, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
   return (
-    <IconContext.Provider value={{ color: 'blue', size: '5rem' }}>
-      <div className="App">
-        {/* <FaReact color="purple" size="10rem"></FaReact>
-        <MdAlarmAdd color="purple" size="10rem"></MdAlarmAdd> */}
-        <FaReact></FaReact>
-        <MdAlarmAdd></MdAlarmAdd>
-      </div>
-    </IconContext.Provider>
+    <div className="App">
+      <button onClick={notify}>Notify </button>
+    </div>
   );
 }
 
