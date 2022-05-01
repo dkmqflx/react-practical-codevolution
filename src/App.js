@@ -1,50 +1,40 @@
 import './App.css';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Modal from 'react-modal';
+import { useState } from 'react';
 
-toast.configure();
-
-// toast를 컴포넌트로 customize 할 수 있다
-const CustomToast = ({ closeToast }) => {
-  return (
-    <div>
-      Something went wrong
-      <button onClick={closeToast}>close</button>
-    </div>
-  );
-};
+Modal.setAppElement('#root'); // console 창 에러 없애기 위해서
 
 function App() {
-  const notify = () => {
-    toast(`Basic notification`, {
-      position: toast.POSITION.TOP_LEFT,
-    });
-    toast.success(`Basic notification`, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 8000,
-    });
-    toast.info(`Basic notification`, {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: false,
-    });
-    toast.warn(<CustomToast />, {
-      position: toast.POSITION.BOTTOM_LEFT,
-    });
-    toast.error(`Basic notification`, {
-      position: toast.POSITION.BOTTOM_CENTER,
-    });
-    toast(`Basic notification`, {
-      position: toast.POSITION.BOTTOM_RIGHT,
-    });
-  };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="App">
-      <button onClick={notify}>Notify </button>
+      <button onClick={() => setModalIsOpen(true)}>open modal</button>
+      <Modal
+        isOpen={modalIsOpen}
+        shouldCloseOnOverlayClick={false}
+        onRequestClose={() => setModalIsOpen(false)}
+        style={{
+          overlay: {
+            backgroundColor: 'gray',
+          },
+          content: {
+            color: 'orange',
+          },
+        }}
+      >
+        <h2>Modal title</h2>
+        <p>Modal body</p>
+        <button onClick={() => setModalIsOpen(false)}>close modal</button>
+      </Modal>
     </div>
   );
 }
 
-// IconContext.Provider로 style 속성을 한번에 지정해줄 수 있다.
-// 직접 아이콘에 선언해서 overrid할 수 도 있다.
-
 export default App;
+
+/**
+ 
+shouldCloseOnOverlayClick -> over lay 부분, 즉 modal 이외의 부분 눌러도 반응안한다 
+shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}
+이렇게 두면 overlay 부분 눌러도 모달 닫히지 않지만, esc 누르면 모달 닫힌다
+ */
